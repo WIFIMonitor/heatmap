@@ -39,7 +39,9 @@ print(height)
 plt.imshow(Image1) # I would add interpolation='none'
 img = points_to_gaussian_heatmap(CENTERS, height, width, SCALE)
 plt.imshow(img,alpha=0.7,cmap="magma")
-plt.savefig('output/piso1.png')
+plt.axis('off') # disable axis and save image
+plt.savefig('output/piso1.png',bbox_inches='tight')
+plt.axis('on') # enable,
 plt.show()
 
 ### HEIGHT AND WIDTH VALUES ARE SWITCHED, LATER WILL CHANGE THEM
