@@ -1,47 +1,45 @@
-from PIL import Image
-import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import multivariate_normal
+from PIL import Image
+from sklearn.datasets._samples_generator import make_blobs
+import seaborn as sns
 
 
-def points_to_gaussian_heatmap(centers, height, width, scale):
-    gaussians = []
-    for y,x in centers:
-        s = np.eye(2)*scale
-        g = multivariate_normal(mean=(x,y), cov=s)
-        gaussians.append(g)
+def create_clusters(centers,n_samples,deviations):
+    X,truth = make_blobs(n_samples=n_samples, centers=centers,cluster_std=deviations,random_state=42)
 
-    # create a grid of (x,y) coordinates at which to evaluate the kernels
-    x = np.arange(0, width)
-    y = np.arange(0, height)
-    xx, yy = np.meshgrid(x,y)
-    xxyy = np.stack([xx.ravel(), yy.ravel()]).T
+    dx = []   # x axis points
+    dy=[]     # y axis points
+    for coords in X:
+      dx.append(coords[0])
+      dy.append(coords[1])
     
-    # evaluate kernels at grid points
-    zz = sum(g.pdf(xxyy) for g in gaussians)
+    return dx,dy
 
-    img = zz.reshape((height,width))
-    return img
 
-SCALE = 2000  # increase scale to make larger gaussians
-CENTERS = [(650,300), 
-           (500,250), 
-           (380,400),
-           (300,300),
-           (290,470),
-           (150,550)] # center points of the gaussians (y,x)
+centers = [(300,650), 
+    (250,500), 
+    (400,380),
+    (300,300),
+    (470,290),
+    (550,150)]   # AP's coordinates
+
+n_samples = [3,6,20,10,4,3]  # number of people conected per API, sorted according to centers
+
+deviations = [3*2,6*2,20*2,10*2,4*2,3*2] # deviation of the clusters, the more people are connected to a certain AP, bigger the deviation.
+
+
+dx,dy = create_clusters(centers,n_samples,deviations) # create clusters
+
+
+plt.scatter(dx, dy)
+plt.title(f"Example of a mixture of {len(centers)} distributions")
+plt.xlabel("x")
+plt.ylabel("y")
 
 
 Image1 = Image.open("input/piso1.png")
 width, height = Image1.size
-print(width)
-print(height)
-plt.imshow(Image1) # I would add interpolation='none'
-img = points_to_gaussian_heatmap(CENTERS, height, width, SCALE)
-plt.imshow(img,alpha=0.7,cmap="magma")
-plt.axis('off') # disable axis and save image
+plt.imshow(Image1, interpolation=None) # I would add interpolation='none'
+sns.kdeplot(x=dx,y=dy,shade=True,thresh=0.05,alpha=0.5,cmap="magma",levels=5,clip=((0,height)),bw_adjust=0.8)
 plt.savefig('output/piso1.png',bbox_inches='tight')
-plt.axis('on') # enable,
 plt.show()
-
-### HEIGHT AND WIDTH VALUES ARE SWITCHED, LATER WILL CHANGE THEM
