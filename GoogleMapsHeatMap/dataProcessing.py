@@ -34,7 +34,7 @@ def readXlsx(dir, fileName):
     #accessPoints = {}
     i = 0
     aps={}
-    fo = open("file.txt","w")
+    fo = open("file2.txt","w")
     fo.write("[")
     for row in sheet.iter_rows(max_col=7, values_only=True):
         a = ""
@@ -44,13 +44,11 @@ def readXlsx(dir, fileName):
             if(row[3]!= None):
                 #id = row[0]
                 apData = {
-                    'location' : row[1],
-                    'name' : row[2],
+                    'id' : row[0],
                     'latitude' : row[3],
                     'longitude' : row[4],
-                    'responsible' : row[5]
                 }
-                a = "{" + "Location: '" + str(row[1]) + "',  Name: '" +str(row[2]) + "', Latitude: " + str(row[3]) + ", Longitude: " + str(row[4]) + "},\n"
+                a = "{" + "id: '" + str(row[0]) + "', Latitude: " + str(row[3]) + ", Longitude: " + str(row[4]) + "},\n"
                 fo.write(a)     
                 #accessPoints[id] = apData
                 aps[i] = apData
