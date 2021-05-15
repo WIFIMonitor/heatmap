@@ -8,9 +8,9 @@ In the future, as the input image gets more precise, the clusters will be limite
 
 ### Input:
 
-<img src="input/piso1.png" alt="Your image title" width="350"/>
+<img src="TimelapeHeatmap/input/piso1.png" alt="Your image title" width="350"/>
 
 ### Output:
 
 
-<img src="output/piso1.png" alt="Your image title" width="350"/>
+<img src="TimelapseHeatmap/output/piso1.png" alt="Your image title" width="350"/>
