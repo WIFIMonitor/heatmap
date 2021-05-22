@@ -1,9 +1,7 @@
 from influxdb import InfluxDBClient
 import plotly.express as px
 import ffmpeg
-import datetime
 import os
-import time
 
 
 client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
@@ -58,7 +56,7 @@ def createVideo():
     
     (
     ffmpeg
-    .input('output/*.png', pattern_type='glob', framerate=5)
+    .input('output/*.jpg', pattern_type='glob', framerate=5)
     .output('timelapse.mkv')
     .run()
     )
@@ -66,16 +64,15 @@ def createVideo():
     print("Video Created! ")
 
 coords = load_ap_coords()
-start = time.time()
 # Generate 10 timelaspes. In the future it will be decided by the user input
-for x in range(1,70):
+for x in range(1,50):
     try:
         df = get_dictionary(coords,x)
         fig = px.density_mapbox(df, lat='lat', lon='lon', z='people', radius=10,
                             center=dict(lat=40.63041451444991, lon=-8.65803098047244),
                             zoom=15,
                             mapbox_style="stamen-terrain",
-                            width=800,
+                            width=550,
                             height=1100,
                             color_continuous_scale= [
                 [0.0, "green"],
@@ -84,14 +81,13 @@ for x in range(1,70):
                 [0.7, "yellow"],
                 [0.9, "red"],
                 [1.0, "red"]],
-                            title= str(prev_ts) + "- " + str((x*15)) + "m"
+                            title= str(prev_ts) + "- " + str((x*15)) + "m",
+                            range_color=(0,30), #max and min values for heatmap
                             ) 
-        fs = "output/file" + f"{x:03d}" + ".png"
+        fs = "output/file" + f"{x:03d}" + ".jpg"
         fig.write_image(fs,scale=0.5)
     except Exception as e:
         print(e)
         continue
-
+    
 createVideo()
-end = time.time()
-print("Time elapsed: ",end-start)

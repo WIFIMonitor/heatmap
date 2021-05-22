@@ -1,8 +1,8 @@
-# `Floor Heatmap`
+# `University Campus Heatmap`
 
-## Create a space occupation heatmap in python from a set of coordinates, still very rough
-It creates a set of clusters around the coordinates (dots), and from those clusters, creates a heatmap using kernel density estimation (kde). 
-In the future, as the input image gets more precise, the clusters will be limited to the image limits, so that dots won't appear beyond the room limits.
+## Heatmap
+
+Uses `plotly` to generate the heatmap around UA campus. Currently does a 1 DAY timelapse, with measures 15 minutes apart
 
 <br>
 
