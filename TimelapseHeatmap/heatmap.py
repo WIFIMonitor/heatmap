@@ -86,7 +86,7 @@ for x in range(1,70):
                 [1.0, "red"]],
                             title= str(prev_ts) + "- " + str((x*15)) + "m"
                             ) 
-        fs = "output/file" + str(x) + ".png"
+        fs = "output/file" + f"{x:03d}" + ".png"
         fig.write_image(fs,scale=0.5)
     except Exception as e:
         print(e)
