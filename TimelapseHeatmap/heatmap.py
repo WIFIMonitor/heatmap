@@ -33,7 +33,7 @@ def get_dictionary(coordinates,timesub):
     sub1 = str(15*timesub)
     sub2 = str(15*(timesub-1))
     # query values between last measurement, minus 15 minutes
-    sq = "select id,clientsCount from clientsCount where time <=\'" + str(prev_ts) + "\'-"+sub2+"m and time > \'" + str(prev_ts) + "\'-"+sub1+"m" 
+    sq = "select id,clientsCount from clientsCount where time <=\'" + str(prev_ts) + "\'-"+sub2+"m and time > \'" + str(prev_ts) + "\'-"+sub1+"m and clientsCount > 0" 
     # get the last 15m values, from the last value in DB, and not from now(), because CISCO PRIME can stop sending values
     try:
         people_count = client.query(sq).raw['series'][0]["values"]
@@ -51,13 +51,13 @@ def get_dictionary(coordinates,timesub):
     return dataset
 
 def createVideo():
-    if os.path.exists("timelapse.mkv"):
-        os.remove("timelapse.mkv")
+    if os.path.exists("timelapse.avi"):
+        os.remove("timelapse.avi")
     
     (
     ffmpeg
-    .input('output/*.jpg', pattern_type='glob', framerate=5)
-    .output('timelapse.mkv')
+    .input('output/*.jpeg', pattern_type='glob', framerate=5)
+    .output('timelapse.avi')
     .run()
     )
 
@@ -84,7 +84,7 @@ for x in range(1,50):
                             title= str(prev_ts) + "- " + str((x*15)) + "m",
                             range_color=(0,30), #max and min values for heatmap
                             ) 
-        fs = "output/file" + f"{x:03d}" + ".jpg"
+        fs = "output/file" + f"{x:03d}" + ".jpeg"
         fig.write_image(fs,scale=0.5)
     except Exception as e:
         print(e)
