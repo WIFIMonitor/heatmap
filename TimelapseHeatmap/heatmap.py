@@ -4,7 +4,7 @@ import ffmpeg
 import os
 
 
-client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
+client = InfluxDBClient("XXX.XXX.XXX.XXX", XXX, "XXXX", "XXXXXXX", "XXXXXXXX")
 # get the last timestamp value of the database
 lasttimestamp= client.query("select last(clientsCount), time from clientsCount").raw['series'][0]['values'][0][0]
 prev_ts = lasttimestamp

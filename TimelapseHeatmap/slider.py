@@ -1,9 +1,9 @@
 from influxdb import InfluxDBClient
 from datetime import datetime,time,timedelta
 import plotly.express as px
-import time
+import timeit
 
-client = InfluxDBClient("***REMOVED***", ***REMOVED***, "***REMOVED***", "***REMOVED***", "***REMOVED***")
+client = InfluxDBClient("XXX.XXX.XXX.XXX", XXX, "XXXX", "XXXXXXX", "XXXXXXXX")
 # get the last timestamp value of the database
 def get_last_ts():
     # get the last timestamp value of the database
@@ -36,7 +36,7 @@ def get_timelapse_dictionary(starttime,measure):
     except Exception as e:
         print(e)
         return []
-
+    
     # create dataset of the measures between the two start and end times
     dataset = []
     for line in people_count:
@@ -61,11 +61,11 @@ def generateTimelapse(start,days):
     # add hours,minutes and seconds precision to above date
     time_measure= datetime.strptime(start_time,'%Y-%m-%dT%H:%M:%S') 
     # Generate timelaspes X timelapses, where X is 96 * days, because, theres 96 measures in each day
-    for x in range(0,(48*days)):
+    for x in range(0,(96*days),4):
         try:
             # since we get values every 15 minutes, we need to now how many 15 minute measures we want
-            offset = str(30*x)
-            offset2 = str(30*(x+1))
+            offset = str(15*x)
+            offset2 = str(15*(x+1))
             query_time = start_time + "Z\' +"+offset+"m and time <= \'" + start_time + "Z\' + "+offset2+"m"
             # add 15 minutes to each query, for better visualization of the slider
             measure_time = time_measure + timedelta(minutes=(float(offset2)))
@@ -92,6 +92,9 @@ def generateTimelapse(start,days):
             title= "Timelapse de: " + start_time[0:10], 
             range_color=(0,30), #max and min values for heatmap
             )
-    return fig.write_html("slider30.html")
+    return fig.write_html("sliderteste.html")
     
+start = timeit.default_timer()
 generateTimelapse("2021-06-04",1)
+end = timeit.default_timer()
+print("Time elapsed: ",end-start)
